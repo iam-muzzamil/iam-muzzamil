@@ -65,6 +65,71 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+    
+    // Mobile skills circular rotation
+    if (window.innerWidth <= 768) {
+        const skillItems = document.querySelectorAll('.skill-item');
+        skillItems.forEach(item => {
+            const index = item.getAttribute('data-i');
+            if (index) {
+                item.style.setProperty('--i', index);
+            }
+        });
+        
+        // Add touch scrolling for skills
+        const skillsContainer = document.querySelector('.skills-container');
+        let startX, scrollLeft;
+        
+        const startDrag = (e) => {
+            startX = e.type === 'touchstart' ? e.touches[0].pageX : e.pageX;
+            scrollLeft = skillsContainer.scrollLeft;
+            skillsContainer.style.cursor = 'grabbing';
+        };
+        
+        const drag = (e) => {
+            if (startX === undefined) return;
+            e.preventDefault();
+            const x = e.type === 'touchmove' ? e.touches[0].pageX : e.pageX;
+            const dist = (startX - x);
+            skillsContainer.scrollLeft = scrollLeft + dist;
+        };
+        
+        const endDrag = () => {
+            startX = undefined;
+            skillsContainer.style.cursor = 'grab';
+        };
+        
+        skillsContainer.addEventListener('touchstart', startDrag, { passive: true });
+        skillsContainer.addEventListener('touchmove', drag, { passive: false });
+        skillsContainer.addEventListener('touchend', endDrag);
+        
+        // Project cards circular movement
+        const projectsGrid = document.querySelector('.projects-grid');
+        let projectStartX, projectScrollLeft;
+        
+        const startProjectDrag = (e) => {
+            projectStartX = e.type === 'touchstart' ? e.touches[0].pageX : e.pageX;
+            projectScrollLeft = projectsGrid.scrollLeft;
+            projectsGrid.style.cursor = 'grabbing';
+        };
+        
+        const dragProject = (e) => {
+            if (projectStartX === undefined) return;
+            e.preventDefault();
+            const x = e.type === 'touchmove' ? e.touches[0].pageX : e.pageX;
+            const dist = (projectStartX - x);
+            projectsGrid.scrollLeft = projectScrollLeft + dist;
+        };
+        
+        const endProjectDrag = () => {
+            projectStartX = undefined;
+            projectsGrid.style.cursor = 'grab';
+        };
+        
+        projectsGrid.addEventListener('touchstart', startProjectDrag, { passive: true });
+        projectsGrid.addEventListener('touchmove', dragProject, { passive: false });
+        projectsGrid.addEventListener('touchend', endProjectDrag);
+    }
 });
 
 // Side navigation dots - highlight current section
@@ -300,6 +365,27 @@ window.addEventListener('scroll', () => {
     
     lastScrollTop = scrollTop;
 }, { passive: true }); // Use passive event listener for better performance
+
+// Update header background on theme toggle
+document.addEventListener('DOMContentLoaded', () => {
+    const themeToggle = document.getElementById('theme-toggle');
+    
+    // Set initial header color
+    updateHeaderColor();
+    
+    // Update header color whenever theme changes
+    themeToggle.addEventListener('change', updateHeaderColor);
+    
+    function updateHeaderColor() {
+        // Force header to update its style based on current theme
+        if (header.classList.contains('scrolled')) {
+            header.classList.remove('scrolled');
+            setTimeout(() => {
+                header.classList.add('scrolled');
+            }, 10);
+        }
+    }
+});
 
 // Enhanced contact form submission with EmailJS
 const contactForm = document.getElementById('contact-form');

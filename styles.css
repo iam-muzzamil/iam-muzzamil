@@ -16,6 +16,7 @@
     --border-color: #232323;
     --shadow-color: rgba(0, 0, 0, 0.3);
     --glass-bg: rgba(20, 20, 20, 0.6);
+    --primary-color-rgb: 10, 10, 10;
 }
 
 /* Light Theme Variables */
@@ -28,6 +29,7 @@
     --border-color: #dee2e6;
     --shadow-color: rgba(0, 0, 0, 0.1);
     --glass-bg: rgba(248, 249, 250, 0.8);
+    --primary-color-rgb: 248, 249, 250;
 }
 
 body {
@@ -961,9 +963,67 @@ footer {
     }
     
     .theme-switch-wrapper {
-        position: absolute;
+        position: fixed;
         top: 15px;
-        right: 70px;
+        right: 80px;
+        z-index: 1001;
+    }
+    
+    .mobile-menu-toggle {
+        z-index: 1001;
+        position: fixed;
+        top: 15px;
+        right: 20px;
+    }
+    
+    .skills-container {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 20px;
+        padding: 15px 0;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .skill-row {
+        min-width: 100%;
+        scroll-snap-align: start;
+        flex: 0 0 auto;
+        display: flex;
+        justify-content: center;
+        transform-style: preserve-3d;
+        perspective: 1000px;
+    }
+    
+    .skills-container::-webkit-scrollbar {
+        height: 5px;
+    }
+    
+    .skills-container::-webkit-scrollbar-track {
+        background: var(--dark-gray);
+        border-radius: 10px;
+    }
+    
+    .skills-container::-webkit-scrollbar-thumb {
+        background: var(--accent-color);
+        border-radius: 10px;
+    }
+    
+    .skill-item {
+        transform: rotateY(calc(var(--i, 0) * 45deg)) translateZ(300px);
+        transition: transform 0.5s;
+        animation: rotateSkills 15s linear infinite;
+    }
+    
+    @keyframes rotateSkills {
+        0% {
+            transform: perspective(1000px) rotateY(0deg);
+        }
+        100% {
+            transform: perspective(1000px) rotateY(360deg);
+        }
     }
 }
 
@@ -1118,4 +1178,55 @@ footer {
     );
     z-index: 2;
     pointer-events: none;
+}
+
+/* Projects Carousel for Mobile */
+@media screen and (max-width: 768px) {
+    .projects-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 20px;
+        padding: 15px 0;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        grid-template-columns: unset;
+    }
+    
+    .project-card {
+        min-width: 280px;
+        scroll-snap-align: start;
+        flex: 0 0 auto;
+        transform-style: preserve-3d;
+        perspective: 1000px;
+        animation: rotateProjects 30s linear infinite;
+        animation-play-state: paused;
+    }
+    
+    .projects-grid:hover .project-card {
+        animation-play-state: running;
+    }
+    
+    @keyframes rotateProjects {
+        0% {
+            transform: perspective(1000px) rotateY(0deg);
+        }
+        100% {
+            transform: perspective(1000px) rotateY(360deg);
+        }
+    }
+    
+    .projects-grid::-webkit-scrollbar {
+        height: 5px;
+    }
+    
+    .projects-grid::-webkit-scrollbar-track {
+        background: var(--dark-gray);
+        border-radius: 10px;
+    }
+    
+    .projects-grid::-webkit-scrollbar-thumb {
+        background: var(--accent-color);
+        border-radius: 10px;
+    }
 } 
